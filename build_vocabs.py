@@ -13,7 +13,7 @@ def build_vocab(str_lsts):
     vocab_decoder = {value: key for key, value in vocab_encoder.items()}
     return vocab_encoder, vocab_decoder
 
-def create_vocab(input_path, output_path):
+def create_vocabs(input_path, output_path):
     _, word_vocab, _, _, _, pos_vocab = rw.read_data(input_path)
     
     pos_vocab = [item for innerlist in pos_vocab for item in innerlist]
@@ -29,4 +29,3 @@ def create_vocab(input_path, output_path):
     np.save(os.path.join(output_path, "word_decoder.npy"), word_decoder)
     np.save(os.path.join(output_path, "word_encoder.npy"), word_encoder)
     
-create_vocab("train.txt", "models/vocab")
