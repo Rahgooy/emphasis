@@ -3,6 +3,7 @@
 """
 from nltk.stem import PorterStemmer as stemmer
 from collections import defaultdict
+import pickle 
 
 class WordFrequencyModel:
     def __init__(self, word_lsts, bio_lsts, lowercase = True, stemming = True):
@@ -49,3 +50,10 @@ class WordFrequencyModel:
                 word_prediction.append(self.model[word_stem] if word_stem in self.model.keys() else 0)
             predictions.append(word_prediction)
         return predictions
+
+
+    def save(self, path):
+        pickle.dump(self.model,open(path,"wb"))
+
+    def load(self, path):
+        self.model = pickle.load(open(path, "rb"))
