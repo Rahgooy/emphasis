@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import Read_data_and_Write_results as rw
-
+from nltk.stem import PorterStemmer as stemmer
 
 def build_vocab(str_lsts):
     vocab_encoder = {}
@@ -17,7 +17,7 @@ def create_vocabs(input_path, output_path):
     _, word_vocab, _, _, _, pos_vocab = rw.read_data(input_path)
     
     pos_vocab = [item for innerlist in pos_vocab for item in innerlist]
-    word_vocab = [item for innerlist in word_vocab for item in innerlist]
+    word_vocab = [stemmer().stem(item.lower()) for innerlist in word_vocab for item in innerlist]
     
     pos_encoder, pos_decoder = build_vocab(pos_vocab)
     word_encoder, word_decoder = build_vocab(word_vocab)
