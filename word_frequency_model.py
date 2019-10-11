@@ -6,22 +6,20 @@ from collections import defaultdict
 import pickle 
 
 class WordFrequencyModel:
-    def __init__(self, word_lsts, bio_lsts, lowercase = True, stemming = True):
+    def __init__(self, lowercase = True, stemming = True):
         self.model = {}
-        self.bio_freq_dict = defaultdict(int)
-        self.occurrences_dict = defaultdict(int)
-        self.word_lsts = word_lsts
-        self.bio_lsts = bio_lsts
         self.lowercase = lowercase
         self.stemming = stemming
     
 
-    def fit(self):
+    def fit(self, word_lsts, bio_lsts):
         """
         Build a model based on bio_freq of words
         """
         self.bio_freq_dict = defaultdict(int)
         self.occurrences_dict = defaultdict(int)
+        self.word_lsts = word_lsts
+        self.bio_lsts = bio_lsts
 
         for i in range(len(self.bio_lsts)):
             for j in range(len(self.bio_lsts[i])):

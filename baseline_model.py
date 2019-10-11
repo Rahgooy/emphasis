@@ -32,10 +32,13 @@ if __name__ == "__main__":
     _, word_lsts, _, bio_lsts, _, _  = rw.read_data(path_to_train)
 
     print("training the model ... ")    
-    wfm_model = wfm(word_lsts, bio_lsts)
-    wfm_model.fit()
-    
+    wfm_model = wfm()
+    wfm_model.fit(word_lsts, bio_lsts)
+    wfm_model.save("WordFrequencyModel.pkl")
+
     print("testing the model ... ")
     word_id_lsts, word_lsts, _, _, _, _  = rw.read_data(path_to_test)
-    predictions = wfm_model.predict(word_lsts)
+    wfm_m = wfm(word_lsts, bio_lsts)
+    wfm_m.load("WordFrequencyModel.pkl")
+    predictions = wfm_m.predict(word_lsts)
     rw.write_results(word_id_lsts, word_lsts, predictions, os.path.join(path_to_output, "submission.txt"))
