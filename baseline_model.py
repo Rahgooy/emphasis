@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     print("testing the model ... ")
     word_id_lsts, word_lsts, _, _, _, _  = rw.read_data(path_to_test)
-    wfm_m = wfm(word_lsts, bio_lsts)
+    wfm_m = wfm()
     wfm_m.load("WordFrequencyModel.pkl")
     predictions = wfm_m.predict(word_lsts)
     rw.write_results(word_id_lsts, word_lsts, predictions, os.path.join(path_to_output, "submission.txt"))
