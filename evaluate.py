@@ -19,11 +19,11 @@ def match_m(all_scores, all_labels):
     :param all_labels: ground_truth labels
     :return: match_m dict
     """
-    print("[LOG] computing Match_m . . .")
+    #print("[LOG] computing Match_m . . .")
     top_m = [1, 2, 3, 4]
     match_ms = {}
     for m in top_m:
-        print("[LOG] computing m={} in match_m".format(m))
+      #  print("[LOG] computing m={} in match_m".format(m))
         intersects_lst = []
         # ****************** computing scores:
         score_lst = []
