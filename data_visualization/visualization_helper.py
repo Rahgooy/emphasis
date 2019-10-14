@@ -4,9 +4,9 @@ from nltk.stem import PorterStemmer as stemmer
 
 def pos_counter(pos_lsts, pos_dict):
     for pos in pos_lsts:
-        if pos[0] in pos_dict.keys():
+        if pos[0] in pos_dict:
             pos_dict[pos[0]] += 1
-        elif pos in pos_dict.keys():
+        elif pos in pos_dict:
             pos_dict[pos] += 1
         else:
             pos_dict["Other"] += 1
