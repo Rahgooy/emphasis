@@ -16,4 +16,5 @@
 |#|Model| Score1| Score2| Score3| Score4| Overall Score|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 1 | WordFrequencyModel | 0.6145 |  0.7141 | 0.7829  | 0.8062 | **0.7294**|
+| 1 | WordConditionalModel | 0.2094 |  0.3770 | 0.4741  | 0.5317 | **0.3980**|
 
