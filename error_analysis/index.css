@@ -1,0 +1,48 @@
+.tools-col {
+  width: 20%;
+  border-right: dashed 1px;
+  min-height: 90%;
+  float: left;
+}
+
+.main-col {
+  max-width: 75%;
+  min-width: 75%;
+  float: left;
+  min-height: 200px;
+  margin-left: 5px;
+  min-height: 90%;
+}
+.models{
+  list-style-type: none;
+  padding: 0px
+}
+.models li {
+  font-family: monospace;
+  background-color: lightcyan;
+  margin-bottom: 1px;
+  padding-left: 5px;
+}
+
+.gt {
+  color: green;
+}
+
+.model {
+  color: blue;
+}
+.model-sample{
+  padding: 5px;
+  margin-top: 3px;
+}
+.text-centered{
+  text-align: center;
+}
+.sample-viewer-title{
+  border-bottom: solid 1px gray;
+  padding: 10px;
+}
+.title{
+  font-size: 16pt;
+  font-weight: bold;
+}
