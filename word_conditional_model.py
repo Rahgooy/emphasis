@@ -19,15 +19,16 @@ class WordConditionalModel:
         return word_matrix
 
 
-    def __represent_sentences_as_matrix(self, matrix, words_lsts):
+    def __represent_sentences_as_matrix(self, words_lsts):
+        matrix = self.__build_matrix(len(words_lsts * 9), len(self.__words))
         for i in range(len(words_lsts)):
             for j in range(len(words_lsts[i])):
                 mj = self.__words.index( stemmer().stem(words_lsts[i][j].lower()))
-                for m in range(9):
-                    matrix[(i * 9) + m][mj] = 1
+                matrix[i*9:(i+1)*9, mj] = 1
         return matrix
 
-    def __represent_bios_as_matrix(self, matrix, bios_lsts, words_lsts):
+    def __represent_bios_as_matrix(self, bios_lsts, words_lsts):
+        matrix = self.__build_matrix(len(words_lsts * 9), len(self.__words))
         for i in range(len(words_lsts)):
             for j in range(len(words_lsts[i])):
                 d = self.__words.index( stemmer().stem(words_lsts[i][j].lower()))
@@ -51,13 +52,10 @@ class WordConditionalModel:
         for word in words_vocab:
             if word not in self.__words:
                 self.__words.append(word)
-
-        self.__words_matrix = self.__build_matrix(len(words_lsts * 9), len(self.__words))
-        self.__bios_matrix = self.__build_matrix(len(words_lsts * 9), len(self.__words))
+        
         self.__model = self.__build_matrix(len(self.__words), len(self.__words))
-
-        self.__words_matrix = self.__represent_sentences_as_matrix(self.__words_matrix, words_lsts)
-        self.__bios_matrix = self.__represent_bios_as_matrix(self.__bios_matrix, bios_lsts, words_lsts)
+        self.__words_matrix = self.__represent_sentences_as_matrix(words_lsts)
+        self.__bios_matrix = self.__represent_bios_as_matrix(bios_lsts, words_lsts)
         print("vocab lenghts: " , len(self.__words))
         for i in range(len(self.__words)):
             if i%100 == 0:
