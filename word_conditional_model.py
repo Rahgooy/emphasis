@@ -13,6 +13,7 @@ class WordConditionalModel:
         self.__bios_matrix = 0
         self.__model = 0
         self.__words = []
+        self.__none_words_vocab = []
     
     def __build_matrix(self, number_of_sentences, number_of_words):
         word_matrix = np.zeros((number_of_sentences, number_of_words))
@@ -64,7 +65,9 @@ class WordConditionalModel:
                 self.__calculate_condetional_probs(i, j)
         print()
 
-    def predict(self, word_lsts):
+    def predict(self, word_lsts, words_id):
+        self.__get_id_of_none_wordvocab(word_lsts, words_id)
+        print(self.__none_words_vocab)
         predictions = []
         for i in range(len(word_lsts)):
             prediction = []
@@ -83,11 +86,21 @@ class WordConditionalModel:
                     prediction.append(0)
             predictions.append(prediction)
         return predictions
+    
+    def __get_id_of_none_wordvocab(word_lsts, words_id):
+        self.__none_words_vocab = []
+        for i in range(len(word_lsts)):
+            for j in range(len(word_lsts[i])):
+                word_ij = stemmer().stem(word_lsts[i][j].lower())
+                if word_ij not in self.__words:
+                    self.__none_words_vocab.append(words_id[i][j])
+        self.__none_words_vocab = none_words_vocab
         
+    
     def save(self, path):
-        model = {"__words":self.__words, "__model":self.__model}
+        model = {"__words":self.__words, "__model":self.__model, "__none_words":self.__none_words_vocab}
         pickle.dump(model,open(path,"wb"))
 
     def load(self, path):
         model = pickle.load(open(path, "rb"))
-        self.__words, self.__model = model["__words"], model["__model"]
+        self.__words, self.__model, self.__none_words_vocab = model["__words"], model["__model"], model["__none_words"]
