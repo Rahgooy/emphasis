@@ -1,0 +1,41 @@
+<html>
+
+<head>
+  <script src="jquery-3.4.1.min.js"></script>
+  <script src="helpers.js"></script>
+  <script src="vue.js"></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="text-centered">
+    <span class="title">Error Analysis tool </span>[<a href="#" v-on:click="show_help">help</a>]
+  </div>
+    <hr />
+    <div class="tools-col">
+      Models:
+      <ul class="models">
+        <model v-for="m in models" v-bind:m="m" v-bind:key="m.id"></model>
+      </ul>
+      <button type="button" name="add-file" v-on:click="add_ground_truth">Add ground-truth</button>
+      <button type="button" name="add-file" v-on:click="add_model">Add a model</button>
+      <hr />
+    </div>
+    <div class="main-col">
+      <div v-if="samples" class="text-centered sample-viewer-title">
+        Viewing sample #<strong>{{page+1}}</strong> from <strong>{{samples}}</strong> samples.<br/>
+        <a href="#" v-on:click="prev_page">prev</a>&nbsp
+        <input :value = "page + 1" v-on:change="goto_page" style="width:50px"></input>
+        <a href="#" v-on:click="next_page">next</a>
+      </div>
+      <div v-for="m in models" v-bind:style="{'color':m.style.color}" class="model-sample">
+        <sample v-bind:s="m.data[page]"></sample>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
+</html>

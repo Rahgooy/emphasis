@@ -4,6 +4,7 @@ import Read_data_and_Write_results as rw
 from nltk.stem import PorterStemmer as stemmer
 import codecs
 
+
 def build_vocab(str_lsts):
     vocab_encoder = {}
     vocab_id = 0
