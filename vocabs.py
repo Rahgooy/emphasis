@@ -21,13 +21,13 @@ def report_new_words(vocab_path, text_path, output_path):
     
     with codecs.open(vocab_path, "r", encoding = "utf-8") as f:
         model = f.read()
-    vocab = {item.split("\t")[0]:item.split("\t")[1] for item in model.split("\n") if len(item) != 0}
+    vocab = set(list(item.split("\t")[1] for item in model.split("\n")))
     
     with codecs.open(text_path, "r", encoding = "utf-8") as f:
         test = f.read()
     text = {item.split("\t")[0]:item.split("\t")[1] for item in test.split("\n") if len(item) != 0}
     
-    new_words = {key: value for key, value in text.items() if value not in dict(map(reversed, vocab.items()))} 
+    new_words = {key: value for key, value in text.items() if value not in vocab} 
     save_json(new_words, output_path)
 
 def save_json(obj, path):

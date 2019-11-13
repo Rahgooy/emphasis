@@ -12,11 +12,10 @@ class WordConditionalModel:
            self.__model = 0
 
     def __calculate_condetional_probs(self,x, y, w_i, w_j):
-        occurrenece_of_wi_and_wj, bold_wi = 0, 0
-        occurrenece_vector = x[:, w_i] * x[:, w_j]
-        occurrenece_of_wi_and_wj = occurrenece_vector.sum()
-        bold_wi = (occurrenece_vector * y[:, w_i]).sum()
-        self.__model[w_i][w_j] = (bold_wi / occurrenece_of_wi_and_wj) if occurrenece_of_wi_and_wj else 0
+        wi_wj = x[:, w_i] * x[:, w_j]
+        wi_wj_count = wi_wj.sum()
+        bold_wi = (wi_wj * y[:, w_i]).sum()
+        self.__model[w_i][w_j] = (bold_wi / wi_wj_count) if wi_wj_count else 0
 
     def fit(self, x, y):
         print("training WordConditionalModel....")
