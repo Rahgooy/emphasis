@@ -9,7 +9,7 @@ def read(path, word2Id = None):
         x = []
         for i in range(len(word_lsts)):
             row = [stemmer().stem(word.lower()) for word in word_lsts[i]]
-            row = [word2Id[word] if word in word2Id else -1]
+            row = [word2Id[word] for word in row if word in word2Id else -1]
             x.append(row * 9)
         return x
 
