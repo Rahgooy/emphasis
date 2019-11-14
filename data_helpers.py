@@ -8,9 +8,8 @@ def read(path, word2Id = None):
     def represent_x_as_matrix(word_lsts, word2Id):
         x = []
         for i in range(len(word_lsts)):
-            row = [word2Id[stemmer().stem(word.lower())]
-                    if stemmer().stem(word.lower()) in word2Id else -1 
-                    for word in word_lsts[i]]
+            row = [stemmer().stem(word.lower()) for word in word_lsts[i]]
+            row = [word2Id[word] if word in word2Id else -1]
             x.append(row * 9)
         return x
 
