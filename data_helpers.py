@@ -3,8 +3,8 @@ import Read_data_and_Write_results as rw
 from nltk.stem import PorterStemmer as stemmer
 import vocabs as v
 
-
 def read(path, word2Id=None):
+
     def represent_x_as_matrix(word_lsts, word2Id):
         x = []
         for i in range(len(word_lsts)):
@@ -31,6 +31,7 @@ def read(path, word2Id=None):
     x = represent_x_as_matrix(word_lsts, word2Id)
     y = represent_y_as_matrix(bio_lsts, word_lsts, word2Id)
     return x, y, word2Id, Id2word, dataId2word
+
 
 
 def get_one_hot_matrix(mtx, n):

@@ -12,6 +12,7 @@ class CrossValidation:
 
 		for train_indexes, test_indexes in kfold.split(train_index):
 			kf += 1
+			print("Cross-validation on Fold-",kf)    
 			#prepare train
 			train_words = [word_lsts[index] for index in train_index[train_indexes]]
 			train_bios = [bio_lsts[index] for index in train_index[train_indexes]]
@@ -28,6 +29,8 @@ class CrossValidation:
 			cv_score += score
 			result["Overall"] = score
 			result_log["Fold-"+str(kf)] = result
+			print("Result for Fold-"+str(kf), ": ", result)
+			print("---------------------------------")
 
 		cv_score = cv_score/cv
 
