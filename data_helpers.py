@@ -4,16 +4,9 @@ from nltk.stem import PorterStemmer as stemmer
 import vocabs as v
     
 def read(path, word2Id = None):
-        
-    def get_one_hot_matrix(mtx, n):
-        matrix = np.zeros([mtx.shape[0], n])
-        for i in range(len(mtx)):
-            temp = [Id for Id in mtx[i] if Id != -1]
-            matrix[i, temp] = 1
-        return matrix
-
+    
     def represent_x_as_matrix(word_lsts, word2Id):
-        x, row = [], []
+        x = []
         for i in range(len(word_lsts)):
             row = [word2Id[stemmer().stem(word.lower())]
                     if stemmer().stem(word.lower()) in word2Id else -1 
@@ -38,9 +31,11 @@ def read(path, word2Id = None):
     dataId2word = v.get_dataId2word(word_lsts, words_id)
     x = represent_x_as_matrix(word_lsts, word2Id)
     y = represent_y_as_matrix(bio_lsts, word_lsts, word2Id)
-    x_one_hot = get_one_hot_matrix(x, word2Id)
-    y_one_hot = get_one_hot_matrix(y, word2Id)
     return x, y, word2Id, Id2word, dataId2word
 
-
-
+def get_one_hot_matrix(mtx, n):
+    matrix = np.zeros([mtx.shape[0], n])
+    for i in range(len(mtx)):
+        temp = [Id for Id in mtx[i] if Id != -1]
+        matrix[i, temp] = 1
+    return matrix
