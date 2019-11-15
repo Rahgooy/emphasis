@@ -22,16 +22,24 @@ def get_dataId2word(word_lsts, words_id):
 
 
 def report_new_words(vocab_path, text_path, output_path):
-    with codecs.open(vocab_path, "r", encoding="utf-8") as f:
-        model = f.read()
-    vocab = set(list(item.split("\t")[1] for item in model.split("\n")))
-
-    with codecs.open(text_path, "r", encoding="utf-8") as f:
-        test = f.read()
-    text = {item.split("\t")[0]: item.split("\t")[1] for item in test.split("\n") if len(item) != 0}
-
-    new_words = {key: value for key, value in text.items() if value not in vocab}
-    save_json(new_words, output_path)
+    t_dataId2word, te_dataId2word = {}, {}
+    
+    t_dataId2word = get_dataId2word_from_path(vocab_path)
+    te_dataId2word = get_dataId2word_from_path(text_path)
+    
+    Ids_of_new_words = [Id for Id, word in te_dataId2word.items() if word not in t_dataId2word.values()]
+    with codecs.open(output_path, "w", encoding= 'utf-8') as f:
+        f.write('\n'.join(Ids_of_new_words))
+    #save_json(new_words, output_path)
+    
+    def get_dataId2word_from_path(path):
+        dataId2word = {}
+        with codecs.open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                (key, val) = line.split("\t")
+                dataId2word[key] = val
+        return dataId2word
+        
 
 
 def save_json(obj, path):
