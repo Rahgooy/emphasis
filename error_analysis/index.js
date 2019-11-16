@@ -1,21 +1,10 @@
-Vue.component('model', {
-  props: ['m'],
-  template: '<li :style=m.style>{{m.name}}</li>'
-});
-Vue.component('sample', {
-  props: ['s'],
-  template: '<div><span v-for="x in s"><highlight :x="x"></highlight>&nbsp</span></div>'
-});
-Vue.component('highlight', {
-  props: ['x'],
-  template: '<span :style=x.style>{{x.word}}</span>'
-});
 new Vue({
   el: '#app',
   data: {
     samples: 0,
     page: 0,
     models: [],
+    missing: {},
     COLORS: ['red', 'blue', 'brown', 'aqua', 'black', 'maroon']
   },
   methods: {
@@ -40,7 +29,7 @@ new Vue({
         this.page--;
     },
     add_ground_truth: function() {
-      Reader((data, filename) => {
+      DataReader((data, filename) => {
         if (!data.length || data[0][0].pos == '') {
           alert('Invalid ground-truth data!');
           return;
@@ -63,12 +52,30 @@ new Vue({
           this.models.unshift(m)
       });
     },
+    add_missing: function(){
+      TextReader((text, filename) => {
+        for (var k in this.missing)
+          delete this.missing[k];
+
+        var missing = JSON.parse(text);
+        for (var k in missing)
+          this.missing[k] = missing[k];
+        if(this.models.length > 0){
+          for(var i in this.models[0].data){
+            var s = this.models[0].data[i];
+            for(var j in s){
+              s[j].new = s[j].id in this.missing;
+            }
+          }
+        }
+      });
+    },
     add_model: function() {
       if (!this.models.length) {
         alert('Please load the ground-truth first.');
         return;
       }
-      Reader((data, filename) => {
+      DataReader((data, filename) => {
         if (!validate(this.models[0].data, data)) {
           alert('Data is not matching with the ground-truth.');
           return;
