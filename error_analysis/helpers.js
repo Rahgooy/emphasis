@@ -18,12 +18,12 @@ DataReader = (onload) => {
     var data = [];
     var curr = [];
     for (l in lines) {
-      if (lines[l] == "") {
+      var parts = lines[l].split('\t')
+      if (lines[l] == "" || parts.length < 2) {
         if (curr.length > 0)
           data.push(curr);
         curr = [];
       } else {
-        var parts = lines[l].split('\t')
         var winfo = {
           id: parts[0],
           word: parts[1],
@@ -31,7 +31,7 @@ DataReader = (onload) => {
           pos: parts.length > 5 ? parts[5] : "",
           new: false,
           getStyle: function() {
-            return this.style + (this.new? ";text-decoration: line-through;": "");
+            return this.style + (this.new ? ";text-decoration: line-through;" : "");
           }
         }
         winfo['style'] = "background-color:rgba(20, 255, 20," + winfo['prob'] + ");";
@@ -40,7 +40,7 @@ DataReader = (onload) => {
     }
     return data;
   };
-  TextReader((contents, filename)=>{
+  TextReader((contents, filename) => {
     onload(parse(contents), filename);
   });
 };
