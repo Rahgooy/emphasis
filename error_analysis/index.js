@@ -9,13 +9,13 @@ new Vue({
   },
   methods: {
     show_help: function() {
-      msg =  "1. Load the ground-truth file by clicking on 'add-ground-truth' button\n" +
+      var msg =  "1. Load the ground-truth file by clicking on 'add-ground-truth' button\n" +
       "2. Load a model file by clicking on 'add-model' button\n" +
       "3. Navigate through the samples";
       alert(msg);
     },
     goto_page: function(e) {
-      index = parseInt(e.target.value) - 1;
+      var index = parseInt(e.target.value) - 1;
       if(index >=0 && index < this.samples){
         this.page = index;
       }
@@ -35,7 +35,7 @@ new Vue({
           return;
         }
         this.samples = data.length;
-        m = {
+        var m = {
           id: 0,
           name: '[gt] ' + filename,
           data: data,
