@@ -9,7 +9,7 @@ import pickle
 class WordConditionalModel:
 
     def __init__(self):
-           self.__model = 0
+        pass
 
     def __calculate_condetional_probs(self,x, y, w_i, w_j):
         wi_wj = x[:, w_i] * x[:, w_j]
@@ -18,35 +18,19 @@ class WordConditionalModel:
         self.__model[w_i][w_j] = (bold_wi / wi_wj_count) if wi_wj_count else 0
 
     def fit(self, x, y):
+        self.__model = np.zeros((x.shape[1], x.shape[1]))
         print("training WordConditionalModel....")
         for i in range(x.shape[1]):
-            if i%100 == 0:
-                print(i , end = ' ')
             for j in range(x.shape[1]):
                 self.__calculate_condetional_probs(x, y, i, j)
-        print()
 
-    def predict(self, word_lsts):
-        predictions = []
-        for i in range(len(word_lsts)):
-            prediction = []
-            for j in range(len(word_lsts[i])):
-                word_ij = stemmer().stem(word_lsts[i][j].lower())
-                if word_ij in self.__words:
-                    w_i = self.__words.index( word_ij )
-                    s = 0
-                    for m in range(len(word_lsts[i])):
-                        word_im = stemmer().stem(word_lsts[i][m].lower())
-                        if word_im in self.__words:
-                            w_j = self.__words.index( word_im )
-                            s += self.__model[w_i][w_j]
-                    prediction.append(s / len(word_lsts[i]))
-                else:
-                    prediction.append(0)
-            predictions.append(prediction)
+    def predict(self, x):
+        predictions = np.array(x)
+        
+        for i in range(x.shape[0]):
+            predictions[i][x[i] == 1] = self.__model[x[i] == 1].sum(1)
         return predictions
-    
-    
+
     def save(self, path):
         model = {"__words":self.__words, "__model":self.__model}
         pickle.dump(model,open(path,"wb"))
