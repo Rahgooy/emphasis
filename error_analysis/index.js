@@ -4,7 +4,7 @@ new Vue({
     samples: 0,
     page: 0,
     models: [],
-    missing: {},
+    missing: new Set([]),
     COLORS: ['red', 'blue', 'brown', 'aqua', 'black', 'maroon']
   },
   methods: {
@@ -54,17 +54,15 @@ new Vue({
     },
     add_missing: function(){
       TextReader((text, filename) => {
-        for (var k in this.missing)
-          delete this.missing[k];
-
-        var missing = JSON.parse(text);
-        for (var k in missing)
-          this.missing[k] = missing[k];
+        this.missing.clear();
+        var missing = text.split('\n');
+        for (var i in missing)
+          this.missing.add(missing[i]);
         if(this.models.length > 0){
           for(var i in this.models[0].data){
             var s = this.models[0].data[i];
             for(var j in s){
-              s[j].new = s[j].id in this.missing;
+              s[j].new = this.missing.has(s[j].id);
             }
           }
         }
