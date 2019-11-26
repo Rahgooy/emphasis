@@ -1,0 +1,13 @@
+Objective: 	
+	Regression is one of the most simplest and strongest ML algorthems. We seek 
+  to find any given relationship between (pos, word) frequency with beeing bold. The one of
+  advantages is that you don not need have the exact words in test_set, as a result, this model
+  handels more "new words".	
+############################################################################
+Improvement: 
+	It worth if we find out how to set more features to the model, also, it is essntial
+  to learn about optimization of the model. 
+############################################################################
+Weakness:
+	The results have showed the model work not so bad, but, they also show that
+  the model with these features has complexity as well.
