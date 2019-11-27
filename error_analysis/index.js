@@ -1,32 +1,21 @@
-Vue.component('model', {
-  props: ['m'],
-  template: '<li :style=m.style>{{m.name}}</li>'
-});
-Vue.component('sample', {
-  props: ['s'],
-  template: '<div><span v-for="x in s"><highlight :x="x"></highlight>&nbsp</span></div>'
-});
-Vue.component('highlight', {
-  props: ['x'],
-  template: '<span :style=x.style>{{x.word}}</span>'
-});
 new Vue({
   el: '#app',
   data: {
     samples: 0,
     page: 0,
     models: [],
+    missing: new Set([]),
     COLORS: ['red', 'blue', 'brown', 'aqua', 'black', 'maroon']
   },
   methods: {
     show_help: function() {
-      msg =  "1. Load the ground-truth file by clicking on 'add-ground-truth' button\n" +
+      var msg =  "1. Load the ground-truth file by clicking on 'add-ground-truth' button\n" +
       "2. Load a model file by clicking on 'add-model' button\n" +
       "3. Navigate through the samples";
       alert(msg);
     },
     goto_page: function(e) {
-      index = parseInt(e.target.value) - 1;
+      var index = parseInt(e.target.value) - 1;
       if(index >=0 && index < this.samples){
         this.page = index;
       }
@@ -40,13 +29,13 @@ new Vue({
         this.page--;
     },
     add_ground_truth: function() {
-      Reader((data, filename) => {
+      DataReader((data, filename) => {
         if (!data.length || data[0][0].pos == '') {
           alert('Invalid ground-truth data!');
           return;
         }
         this.samples = data.length;
-        m = {
+        var m = {
           id: 0,
           name: '[gt] ' + filename,
           data: data,
@@ -63,12 +52,28 @@ new Vue({
           this.models.unshift(m)
       });
     },
+    add_missing: function(){
+      TextReader((text, filename) => {
+        this.missing.clear();
+        var missing = text.split('\n');
+        for (var i in missing)
+          this.missing.add(missing[i]);
+        if(this.models.length > 0){
+          for(var i in this.models[0].data){
+            var s = this.models[0].data[i];
+            for(var j in s){
+              s[j].new = this.missing.has(s[j].id);
+            }
+          }
+        }
+      });
+    },
     add_model: function() {
       if (!this.models.length) {
         alert('Please load the ground-truth first.');
         return;
       }
-      Reader((data, filename) => {
+      DataReader((data, filename) => {
         if (!validate(this.models[0].data, data)) {
           alert('Data is not matching with the ground-truth.');
           return;
