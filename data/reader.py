@@ -25,16 +25,21 @@ def read(path, word2Id=None):
                 y.append(row)
         return y
 
-    words_id, word_lsts, bio_lsts, freq_lsts, prob_lsts, pos_lsts = rw.read_data(path)
-    Id2word, word2Id = v.build_vocab(word_lsts)
-    dataId2word = v.get_dataId2word(word_lsts, words_id)
-    x = represent_x_as_matrix(word_lsts, word2Id)
-    y = represent_y_as_matrix(bio_lsts, word_lsts, word2Id)
-    return x, y, word2Id, Id2word, dataId2word
-
+    if word2Id == None:
+        words_id, word_lsts, bio_lsts, freq_lsts, prob_lsts, pos_lsts = rw.read_data(path)
+        Id2word, word2Id = v.build_vocab(word_lsts)
+        dataId2word = v.get_dataId2word(word_lsts, words_id)
+        x = represent_x_as_matrix(word_lsts, word2Id)
+        y = represent_y_as_matrix(bio_lsts, word_lsts, word2Id)
+        return x, y, word2Id, Id2word, dataId2word
+    else:
+        _, word_lsts, _, _, _, _ = rw.read_data(path)
+        x = represent_x_as_matrix(word_lsts, word2Id)
+        return x
 
 
 def get_one_hot_matrix(mtx, n):
+    mtx = np.array(mtx)
     matrix = np.zeros([mtx.shape[0], n])
     for i in range(len(mtx)):
         temp = [Id for Id in mtx[i] if Id != -1]
