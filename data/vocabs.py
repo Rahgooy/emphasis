@@ -17,8 +17,7 @@ def build_vocab(word_lsts):
 def get_dataId2word(word_lsts, words_id):
     ids = [id for sent in words_id for id in sent]
     words = [word for sent in word_lsts for word in sent]
-    words = set([stemmer().stem(word.lower()) for word in words])
-
+    words = ([stemmer().stem(word.lower()) for word in words])
     return dict(zip(ids, words))
 
 
