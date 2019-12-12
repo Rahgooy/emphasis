@@ -8,6 +8,7 @@ from reader import read, get_one_hot_matrix
 class TestDataMethods(unittest.TestCase):
     def setUp(self):
         self.x, self.y, self.word2Id, self.Id2word, self.dataId2word = read('D:\Emphasis_Selection\Github\Taher_Github\emphasis\input/test_case_train.txt')
+        self.x_test = read('D:\Emphasis_Selection\Github\Taher_Github\emphasis\input/test_case_train.txt', word2Id= self.word2Id)
         self.one_hot_x = get_one_hot_matrix(self.x, len(self.word2Id))
     def test_read(self):
         self.assertEqual(self.word2Id, {'!': 0, 'date': 1, 'day': 2, 'friendship': 3, 'happi': 4, 'real': 5, 'save': 6,
