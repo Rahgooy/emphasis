@@ -9,6 +9,8 @@ import pickle
 class WordFrequencyModel:
     def __init__(self):
         pass
+    def get_model(self):
+        return self.__model
     
     def fit(self, X, y):
         print("training WordFrequencyModel....")
@@ -20,7 +22,7 @@ class WordFrequencyModel:
         print("predicting....")
         predictions = np.array(X)
         for i in range(X.shape[0]):
-            predictions[i][X[i] == 1] = self.__model[X[i] == 1] 
+            predictions[i][X[i] == 1] = self.__model[X[i] == 1].sum(1)
         return predictions
 
     def save(self, path):
