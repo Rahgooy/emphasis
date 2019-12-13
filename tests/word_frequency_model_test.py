@@ -1,13 +1,14 @@
 import unittest
 import numpy as np
 import sys
-from word_frequency_model import WordFrequencyModel
 sys.path.insert(1,'D:\Emphasis_Selection\Github\Taher_Github\emphasis\data')
 from reader import read, get_one_hot_matrix
+sys.path.insert(2, 'D:\Emphasis_Selection\Github\Taher_Github\emphasis\models')
+from word_frequency_model import WordFrequencyModel
 
 class TestWordFrequencyMethods(unittest.TestCase):
     def setUp(self):
-        self.X, self.y, self.word2Id, self.Id2word, self.dataId2word = read('D:\Emphasis_Selection\Github\Taher_Github\emphasis\input/model_test_case.txt')
+        self.X, self.y, self.word2Id, self.Id2word, self.dataId2word = read('D:\Emphasis_Selection\Github\Taher_Github\emphasis\input/test_case_models.txt')
         self.x_test = read('D:\Emphasis_Selection\Github\Taher_Github\emphasis\input/test_case_train.txt', word2Id= self.word2Id)
         self.one_hot_X = get_one_hot_matrix(self.X, len(self.word2Id))
         self.one_hot_y = get_one_hot_matrix(self.y, len(self.word2Id))
