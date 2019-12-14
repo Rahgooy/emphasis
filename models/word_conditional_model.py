@@ -10,6 +10,8 @@ class WordConditionalModel:
     
     def __init__(self):
         pass
+    def get_model(self):
+        return self.__model
 
     def __calculate_condetional_probs(self,X, y, w_i, w_j):
         wi_wj = X[:, w_i] * X[:, w_j]
@@ -27,8 +29,8 @@ class WordConditionalModel:
 
     def predict(self, X):
         predictions = np.array(X)
-        for i in range(x.shape[0]):
-            predictions[i][X[i] == 1] = self.__model[X[i] == 1].sum(1)
+        for i in range(X.shape[0]):
+            predictions[i][X[i] == 1] = (self.__model[X[i] == 1][:, X[i] == 1].sum(1))/ (X[i] == 1).sum()
         return predictions
 
     def save(self, path):
