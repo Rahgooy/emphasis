@@ -1,5 +1,5 @@
 """
-    Creating conditional model & predicting  
+Creating conditional model & predicting  
 """
 
 import numpy as np
@@ -7,46 +7,32 @@ from nltk.stem import PorterStemmer as stemmer
 import pickle 
 
 class WordConditionalModel:
-
+    
     def __init__(self):
-           self.__model = 0
+        pass
+    def get_model(self):
+        return self.__model
 
-    def __calculate_condetional_probs(self,x, y, w_i, w_j):
-        wi_wj = x[:, w_i] * x[:, w_j]
+    def __calculate_condetional_probs(self,X, y, w_i, w_j):
+        wi_wj = X[:, w_i] * X[:, w_j]
         wi_wj_count = wi_wj.sum()
         bold_wi = (wi_wj * y[:, w_i]).sum()
         self.__model[w_i][w_j] = (bold_wi / wi_wj_count) if wi_wj_count else 0
 
-    def fit(self, x, y):
+    def fit(self, X, y):
+        
+        self.__model = np.zeros((X.shape[1], X.shape[1]))
         print("training WordConditionalModel....")
-        for i in range(x.shape[1]):
-            if i%100 == 0:
-                print(i , end = ' ')
-            for j in range(x.shape[1]):
-                self.__calculate_condetional_probs(x, y, i, j)
-        print()
+        for i in range(X.shape[1]):
+            for j in range(X.shape[1]):
+                self.__calculate_condetional_probs(X, y, i, j)
 
-    def predict(self, word_lsts):
-        predictions = []
-        for i in range(len(word_lsts)):
-            prediction = []
-            for j in range(len(word_lsts[i])):
-                word_ij = stemmer().stem(word_lsts[i][j].lower())
-                if word_ij in self.__words:
-                    w_i = self.__words.index( word_ij )
-                    s = 0
-                    for m in range(len(word_lsts[i])):
-                        word_im = stemmer().stem(word_lsts[i][m].lower())
-                        if word_im in self.__words:
-                            w_j = self.__words.index( word_im )
-                            s += self.__model[w_i][w_j]
-                    prediction.append(s / len(word_lsts[i]))
-                else:
-                    prediction.append(0)
-            predictions.append(prediction)
+    def predict(self, X):
+        predictions = np.array(X)
+        for i in range(X.shape[0]):
+            predictions[i][X[i] == 1] = (self.__model[X[i] == 1][:, X[i] == 1].sum(1))/ (X[i] == 1).sum()
         return predictions
-    
-    
+
     def save(self, path):
         model = {"__words":self.__words, "__model":self.__model}
         pickle.dump(model,open(path,"wb"))
