@@ -5,23 +5,24 @@ import vocabs as v
 
 def read(path, word2Id=None):
 
-    def represent_x_as_matrix(word_lsts, word2Id):
+    def vocab_features_X(word_lsts, word2Id, num_of_annotators = 1):
         x = []
         for i in range(len(word_lsts)):
             row = [stemmer().stem(word.lower()) for word in word_lsts[i]]
             row = [word2Id[word] if word in word2Id else -1 for word in row]
-            x += [row] * 9
+            x += [row] * num_of_annotators
         return x
 
-    def represent_y_as_matrix(bios_lsts, words_lsts, word2Id):
+    def y_as_one_hot(bios_lsts, words_lsts, word2Id, num_of_annotators = 1):
         y = []
         for i in range(len(words_lsts)):
-            for m in range(9):
+            for m in range(num_of_annotators):
                 row = []
                 for j in range(len(words_lsts[i])):
-                    wordId = word2Id[stemmer().stem(words_lsts[i][j].lower())]
                     if bios_lsts[i][j][m * 2] == "I" or bios_lsts[i][j][m * 2] == "B":
-                        row.append(wordId)
+                        row.append(1)
+                    else:
+                        row.append(0)
                 y.append(row)
         return y
 
@@ -29,19 +30,12 @@ def read(path, word2Id=None):
         words_id, word_lsts, bio_lsts, freq_lsts, prob_lsts, pos_lsts = rw.read_data(path)
         Id2word, word2Id = v.build_vocab(word_lsts)
         dataId2word = v.get_dataId2word(word_lsts, words_id)
-        x = represent_x_as_matrix(word_lsts, word2Id)
-        y = represent_y_as_matrix(bio_lsts, word_lsts, word2Id)
+        annotators = int(freq_lsts[0][0][0]) + int(freq_lsts[0][0][2]) + int(freq_lsts[0][0][4])
+        x = vocab_features_X(word_lsts, word2Id, num_of_annotators = annotators)
+        y = y_as_one_hot(bio_lsts, word_lsts, word2Id, annotators)
         return x, y, word2Id, Id2word, dataId2word
     else:
         _, word_lsts, _, _, _, _ = rw.read_data(path)
-        x = represent_x_as_matrix(word_lsts, word2Id)
+        x = vocab_features_X(word_lsts, word2Id)
         return x
 
-
-def get_one_hot_matrix(mtx, n):
-    mtx = np.array(mtx)
-    matrix = np.zeros([mtx.shape[0], n])
-    for i in range(len(mtx)):
-        temp = [Id for Id in mtx[i] if Id != -1]
-        matrix[i, temp] = 1
-    return matrix
