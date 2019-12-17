@@ -2,7 +2,8 @@ import unittest
 import sys
 import numpy as np
 sys.path.insert(1,'D:\Emphasis_Selection\Github\Taher_Github\emphasis\data')
-from reader import read, get_one_hot_matrix
+from reader import read
+from helpers import get_one_hot_matrix
 
 
 class TestDataMethods(unittest.TestCase):
@@ -25,10 +26,10 @@ class TestDataMethods(unittest.TestCase):
         self.assertEqual(self.x[0], [6, 7, 1])
         self.assertEqual(self.x[10], [8, 5])
         self.assertEqual(self.x[18], [4, 3, 2, 0])
-        self.assertEqual(self.y[0], [1])
-        self.assertEqual(self.y[1], [6, 7, 1])
-        self.assertEqual(self.y[9], [5])
-        self.assertEqual(self.y[19], [3, 2])
+        self.assertEqual(self.y[0], [0, 0, 1])
+        self.assertEqual(self.y[1], [1, 1, 1])
+        self.assertEqual(self.y[9], [0, 1])
+        self.assertEqual(self.y[19], [0, 1, 1, 0])
         self.assertEqual(self.one_hot_x.shape, (len(self.x), len(self.word2Id)))      
         self.assertTrue(np.all(self.one_hot_x[0:9, 0:9] == np.array([[0, 1, 0, 0, 0, 0, 1, 1, 0]] * 9)))
 
